@@ -15,7 +15,7 @@ info:
     url: https://www.apache.org/licenses/LICENSE-2.0
 
 servers:
-  - url: http://localhost:8000
+  - url: http://localhost:8080
     description: Development Server
   - url: https://blog-tech-api.onrender.com
     description: Production Server
@@ -49,62 +49,77 @@ paths:
                     type: string
                     example: Server is down
 
-  # ============= [ POST -> LOGIN USER ] ===============
+  # ============= [ Authentication ] ===============
+  # -- Login
   /api/v1/auth/login:
     $ref: "authentication/login.yaml"
 
-  # ============= [ POST -> REGISTER USER ] ===============
+  # -- Registration
   /api/v1/auth/register:
     $ref: "authentication/register.yaml"
 
-  # ============= [ GET -> CHECK USER PROFILE ] ===============
+  # ============= [ USER MANAGE ] ===============
+  # -- Check User
   /api/v1/user/check:
     $ref: "user/check.user.yaml"
 
-  # ============= [ GET -> LOGOUT USER ] ===============
+  # -- Get Logout User
   /api/v1/user/logout:
     $ref: "user/logout.user.yaml"
 
-  # ============= [ GET -> SEE ALL USERS ] ===============
+  # -- Get All Users
   /api/v1/user/users:
     $ref: "user/all.user.yaml"
 
-  # ============= [ GET -> SEE ALL USERS ] ===============
+  # -- Get User
   /api/v1/user/{id}:
     $ref: "user/user_by_id.user.yaml"
 
-  # ============= [ PUT -> USER PROFILE UPDATE ] ===============
+  # -- Update Profile
   /api/v1/user/update-profile:
     $ref: "user/profile_update.user.yaml"
 
-  # ============= [ POST -> CHANGE USER PASSWORD ] ===============
+  # -- Change Password
   /api/v1/user/change-password:
     $ref: "user/password_change.user.yaml"
-  
-  # ============= [ DELETE -> DELETE USER ] ===============
+
+  # -- Delete
   /api/v1/user:
     $ref: "user/delete_user.user.yaml"
 
-  # ============= [ GET -> GET ALL BLOGS ] ===============
-  # ============= [ POST -> BLOG CREATING ] ===============
+  # ============= [ BLOG MANAGE ] ===============
+  # -- Get All Blogs & Create Blog
   /api/v1/blogs:
     $ref: "blog/read_write_blog.yaml"
 
-  # ============= [ GET -> GET BLOG BY ID ] ===============
-  # ============= [ PUT -> BLOG UPDATE ] ==================
-  # ============= [ DELETE -> BLOG DELETE ] ===============
-  /api/v1/blogs/{blogId}:
+  # -- Get Blog, Update Blog & Delete Blog
+  /api/v1/blog/{blogId}:
     $ref: "blog/update_delete_read_blog.yaml"
 
-  # ============= [ GET -> ADMIN BLOGS ] ===============
+  # ============= [ ADMIN PANEL ] ===============
+  # -- Get All Admin Blogs
   /api/v1/admin/blogs:
     $ref: "admin/blogs.admin.yaml"
 
-  # ============= [ GET -> GET ADMINS BLOGS ] ===============
-  # ============= [ PUT -> UPDATE ADMIN BLOG ] ===============
-  # ============= [ DELETE -> ADMIN BLOG DELETE ] ===============
-  /api/v1/admin/blogs/{blogId}:
+  # -- Admin Create Blog
+  /api/v1/admin/blog:
+    $ref: "admin/create_blog.admin.yaml"
+
+  # -- Get Admin Blog, Update Blog & Delete Blog
+  /api/v1/admin/blog/{blogId}:
     $ref: "admin/update.delete.blog.admin.yaml"
+
+  # -- Blog Approval Change by Admin only
+  /api/v1/admin/blog/change-approval/{blogId}:
+    $ref: "admin/blog_approval_change.admin.yaml"
+
+  # -- Blog Statuc Change by Admin only
+  /api/v1/admin/blog/change-status/{blogId}:
+    $ref: "admin/blog_status_change.admin.yaml"
+
+  # -- User Role Change by Admin only
+  /api/v1/admin/user/change-role/{userId}:
+    $ref: "admin/user_role_change.admin.yaml"
 
 # ============= [ ALL SCHEMAS REQUESTS ] ===============
 components:

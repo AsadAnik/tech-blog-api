@@ -1,0 +1,19 @@
+# ============= [ POST -> BLOG CREATING ] ===============
+post:
+  tags:
+    - Admin Panel
+  summary: Create a Blog Post (Admin)
+  description: Create a new blog post
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../swagger.yaml#/components/schemas/BlogCreateRequest"
+  responses:
+    "201":
+      description: Blog post created successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "../swagger.yaml#/components/schemas/BlogResponse"

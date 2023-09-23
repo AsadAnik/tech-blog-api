@@ -1,4 +1,4 @@
-# ============= [ GET -> GET ADMINS BLOGS ] ===============
+# ============= [ GET -> GET ADMIN BLOG ] ===============
 get:
   tags:
     - Admin Panel

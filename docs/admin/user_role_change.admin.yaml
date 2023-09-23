@@ -1,0 +1,33 @@
+# ============= [ PATCH -> CHANGE USER ROLE ] ===============
+patch:
+  tags:
+    - Admin Panel
+  summary: Change User Role (Admin)
+  description: Change user role as admin has access
+  parameters:
+    - in: path
+      name: userId
+      required: true
+      schema:
+        type: string
+      description: ID of the user to change role
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            role:
+              type: string
+              # default: user
+              example: user
+  responses:
+    "200":
+      description: User updated successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "../swagger.yaml#/components/schemas/BlogResponse"
+    "404":
+      description: User not found.

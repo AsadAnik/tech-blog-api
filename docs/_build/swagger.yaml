@@ -13,7 +13,7 @@ info:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0'
 servers:
-  - url: 'http://localhost:8000'
+  - url: 'http://localhost:8080'
     description: Development Server
   - url: 'https://blog-tech-api.onrender.com'
     description: Production Server
@@ -391,7 +391,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BlogResponse'
-  '/api/v1/blogs/{blogId}':
+  '/api/v1/blog/{blogId}':
     get:
       tags:
         - Blog Manage
@@ -470,7 +470,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BlogListResponse'
-  '/api/v1/admin/blogs/{blogId}':
+  /api/v1/admin/blog:
+    post:
+      tags:
+        - Admin Panel
+      summary: Create a Blog Post (Admin)
+      description: Create a new blog post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogCreateRequest'
+      responses:
+        '201':
+          description: Blog post created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogResponse'
+  '/api/v1/admin/blog/{blogId}':
     get:
       tags:
         - Admin Panel
@@ -536,6 +555,104 @@ paths:
           description: Blog post deleted successfully.
         '404':
           description: Blog post not found.
+  '/api/v1/admin/blog/change-approval/{blogId}':
+    patch:
+      tags:
+        - Admin Panel
+      summary: Change blog approval (Admin)
+      description: Change blog approval as admin has access
+      parameters:
+        - in: path
+          name: blogId
+          required: true
+          schema:
+            type: string
+          description: ID of the blog post to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                approved:
+                  type: boolean
+                  default: false
+                  example: true
+      responses:
+        '200':
+          description: Blog post updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogResponse'
+        '404':
+          description: Blog post not found.
+  '/api/v1/admin/blog/change-status/{blogId}':
+    patch:
+      tags:
+        - Admin Panel
+      summary: Change blog status (Admin)
+      description: Change blog status as admin has access
+      parameters:
+        - in: path
+          name: blogId
+          required: true
+          schema:
+            type: string
+          description: ID of the blog post to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  default: pending
+                  example: running
+      responses:
+        '200':
+          description: Blog post updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogResponse'
+        '404':
+          description: Blog post not found.
+  '/api/v1/admin/user/change-role/{userId}':
+    patch:
+      tags:
+        - Admin Panel
+      summary: Change User Role (Admin)
+      description: Change user role as admin has access
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: ID of the user to change role
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role:
+                  type: string
+                  example: user
+      responses:
+        '200':
+          description: User updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogResponse'
+        '404':
+          description: User not found.
 components:
   schemas:
     User:
