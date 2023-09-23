@@ -1,0 +1,33 @@
+# ============= [ PATCH -> CHANGE BLOG STATUS ] ===============
+patch:
+  tags:
+    - Admin Panel
+  summary: Change blog status (Admin)
+  description: Change blog status as admin has access
+  parameters:
+    - in: path
+      name: blogId
+      required: true
+      schema:
+        type: string
+      description: ID of the blog post to update.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              # default: pending
+              example: running
+  responses:
+    "200":
+      description: Blog post updated successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "../swagger.yaml#/components/schemas/BlogResponse"
+    "404":
+      description: Blog post not found.
