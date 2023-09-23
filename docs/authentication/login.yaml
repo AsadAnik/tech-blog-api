@@ -1,0 +1,48 @@
+# paths:
+# ============= [ POST -> LOGIN USER ] ===============
+post:
+  tags:
+    - Authentication
+  description: Endpoint to authenticate a user and obtain a token
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            nameOrEmail:
+              type: string
+              example: user@example.com
+            password:
+              type: string
+              example: your_password
+  responses:
+    "200":
+      description: Successful login response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: Successfully Logged-In
+              user:
+                $ref: "../swagger.yaml#/components/schemas/User"
+    "401":
+      description: Unauthorized response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: Unauthorized

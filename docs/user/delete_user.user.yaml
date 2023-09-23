@@ -1,0 +1,17 @@
+# ============= [ DELETE -> DELETE USER ] ===============
+delete:
+  tags:
+    - User Manage
+  summary: Delete User
+  description: Delete / Remove User from system
+  responses:
+    "200":
+      description: Deleted User Successfully
+      content:
+        application/json:
+          schema: 
+            $ref: "../swagger.yaml#/components/schemas/UserWithoutPassword"
+    "401":
+      description: Cannot Delete User!
+    "404":
+      description: User not found!

@@ -1,0 +1,24 @@
+# ============= [ GET -> CHECK USER PROFILE ] ===============
+get:
+  tags:
+    - User Manage
+  summary: Check User Or Profile
+  description: Check user information OR profile
+  operationId: checkUser
+  responses:
+    200:
+      description: User information retrieved successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              user:
+                $ref: "../swagger.yaml#/components/schemas/User"
+    401:
+      description: Unauthorized
+    500:
+      description: Internal Server Error

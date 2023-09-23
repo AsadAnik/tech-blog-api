@@ -1,0 +1,70 @@
+# ============= [ GET -> GET ADMINS BLOGS ] ===============
+get:
+  tags:
+    - Admin Panel
+  summary: Get Blog Post by ID (Admin)
+  description: Retrieve a blog post by its unique ID for admin.
+  parameters:
+    - in: path
+      name: blogId
+      required: true
+      schema:
+        type: string
+      description: ID of the blog post to retrieve.
+  responses:
+    "200":
+      description: Successfully retrieved the blog post.
+      content:
+        application/json:
+          schema:
+            $ref: "../swagger.yaml#/components/schemas/BlogResponse"
+    "404":
+      description: Blog post not found.
+
+# ============= [ PUT -> UPDATE ADMIN BLOG ] ===============
+put:
+  tags:
+    - Admin Panel
+  summary: Update Blog Post by ID (Admin)
+  description: Update an existing blog post by its unique ID for admin.
+  parameters:
+    - in: path
+      name: blogId
+      required: true
+      schema:
+        type: string
+      description: ID of the blog post to update.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../swagger.yaml#/components/schemas/BlogUpdateRequest"
+  responses:
+    "200":
+      description: Blog post updated successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "../swagger.yaml#/components/schemas/BlogResponse"
+    "404":
+      description: Blog post not found.
+
+# ============= [ DELETE -> ADMIN BLOG DELETE ] ===============
+delete:
+  tags:
+    - Admin Panel
+  summary: Delete Blog Post by ID (Admin)
+  description: Delete a blog post by its unique ID for admin.
+  parameters:
+    - in: path
+      name: blogId
+      required: true
+      schema:
+        type: string
+      description: ID of the blog post to delete.
+  responses:
+    "204":
+      description: Blog post deleted successfully.
+    "404":
+      description: Blog post not found.

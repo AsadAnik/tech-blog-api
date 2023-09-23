@@ -1,0 +1,13 @@
+# ============= [ GET -> ADMIN BLOGS ] ===============
+get:
+  tags:
+    - Admin Panel
+  summary: Get All Blog Posts (Admin)
+  description: Retrieve a list of all blog posts for admin.
+  responses:
+    "200":
+      description: Successfully retrieved the list of blog posts.
+      content:
+        application/json:
+          schema:
+            $ref: "../swagger.yaml#/components/schemas/BlogListResponse"

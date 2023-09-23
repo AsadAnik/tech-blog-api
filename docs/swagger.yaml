@@ -1,0 +1,205 @@
+openapi: 3.0.0
+
+info:
+  version: 1.0.0
+  title: Tech Blog
+  description: >
+    I'm learning the OpenAPI Specification (OAS). This is an industry-standard technique for documenting web services.
+  termsOfService: https://example.com/terms
+  contact:
+    name: Asad Anik
+    url: https://asadanik.netlify.app
+    email: engr.asadanik@gmail.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+
+servers:
+  - url: http://localhost:8000
+    description: Development Server
+  - url: https://blog-tech-api.onrender.com
+    description: Production Server
+
+paths:
+  # ============= [ GET -> API HEALTH CHECKING ] ===============
+  /health:
+    get:
+      tags:
+        - API Health Checks
+      description: Endpoint to test the health of the API
+      responses:
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Ok
+        "500":
+          description: Server error response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server is down
+
+  # ============= [ POST -> LOGIN USER ] ===============
+  /api/v1/auth/login:
+    $ref: "authentication/login.yaml"
+
+  # ============= [ POST -> REGISTER USER ] ===============
+  /api/v1/auth/register:
+    $ref: "authentication/register.yaml"
+
+  # ============= [ GET -> CHECK USER PROFILE ] ===============
+  /api/v1/user/check:
+    $ref: "user/check.user.yaml"
+
+  # ============= [ GET -> LOGOUT USER ] ===============
+  /api/v1/user/logout:
+    $ref: "user/logout.user.yaml"
+
+  # ============= [ GET -> SEE ALL USERS ] ===============
+  /api/v1/user/users:
+    $ref: "user/all.user.yaml"
+
+  # ============= [ GET -> SEE ALL USERS ] ===============
+  /api/v1/user/{id}:
+    $ref: "user/user_by_id.user.yaml"
+
+  # ============= [ PUT -> USER PROFILE UPDATE ] ===============
+  /api/v1/user/update-profile:
+    $ref: "user/profile_update.user.yaml"
+
+  # ============= [ POST -> CHANGE USER PASSWORD ] ===============
+  /api/v1/user/change-password:
+    $ref: "user/password_change.user.yaml"
+  
+  # ============= [ DELETE -> DELETE USER ] ===============
+  /api/v1/user:
+    $ref: "user/delete_user.user.yaml"
+
+  # ============= [ GET -> GET ALL BLOGS ] ===============
+  # ============= [ POST -> BLOG CREATING ] ===============
+  /api/v1/blogs:
+    $ref: "blog/read_write_blog.yaml"
+
+  # ============= [ GET -> GET BLOG BY ID ] ===============
+  # ============= [ PUT -> BLOG UPDATE ] ==================
+  # ============= [ DELETE -> BLOG DELETE ] ===============
+  /api/v1/blogs/{blogId}:
+    $ref: "blog/update_delete_read_blog.yaml"
+
+  # ============= [ GET -> ADMIN BLOGS ] ===============
+  /api/v1/admin/blogs:
+    $ref: "admin/blogs.admin.yaml"
+
+  # ============= [ GET -> GET ADMINS BLOGS ] ===============
+  # ============= [ PUT -> UPDATE ADMIN BLOG ] ===============
+  # ============= [ DELETE -> ADMIN BLOG DELETE ] ===============
+  /api/v1/admin/blogs/{blogId}:
+    $ref: "admin/update.delete.blog.admin.yaml"
+
+# ============= [ ALL SCHEMAS REQUESTS ] ===============
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        avatar:
+          type: string # You can specify the data type for the avatar (e.g., string for image URLs)
+        role:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        token:
+          type: string
+
+    # Here is User Schema without Password Field..
+    UserWithoutPassword:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: "64f63d20d56f18e6cb2ec7aa"
+        iat:
+          type: integer
+          example: 1693861862
+        exp:
+          type: integer
+          example: 1693865462
+
+    # Here is for User update request schema..
+    UserUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          example: user@example.com
+        avatar:
+          type: string
+          format: url
+          example: https://example.com/avatar.jpg
+
+    # Here is Blog creating request..
+    BlogCreateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          example: My Blog Post
+        content:
+          type: string
+          example: This is the content of my blog post.
+
+    # Here is Blog updating request..
+    BlogUpdateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Updated Blog Title
+        content:
+          type: string
+          example: Updated blog content.
+
+    # Here is Blog Response..
+    BlogResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 12345
+        title:
+          type: string
+          example: My Blog Post
+        content:
+          type: string
+          example: This is the content of my blog post.
+
+    # That is Blog list Response..
+    BlogListResponse:
+      type: array
+      items:
+        $ref: "#/components/schemas/BlogResponse"

@@ -1,0 +1,20 @@
+# ============= [ GET -> SEE ALL USERS ] ===============
+get:
+  tags:
+    - User Manage
+  summary: Get All Users
+  description: Retrieve a list of all users.
+  operationId: getAllUsers
+  responses:
+    200:
+      description: List of users retrieved successfully
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../swagger.yaml#/components/schemas/UserWithoutPassword"
+    401:
+      description: Unauthorized
+    500:
+      description: Internal Server Error

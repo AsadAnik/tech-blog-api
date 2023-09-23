@@ -1,0 +1,622 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Tech Blog
+  description: |
+    I'm learning the OpenAPI Specification (OAS). This is an industry-standard technique for documenting web services.
+  termsOfService: 'https://example.com/terms'
+  contact:
+    name: Asad Anik
+    url: 'https://asadanik.netlify.app'
+    email: engr.asadanik@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0'
+servers:
+  - url: 'http://localhost:8000'
+    description: Development Server
+  - url: 'https://blog-tech-api.onrender.com'
+    description: Production Server
+paths:
+  /health:
+    get:
+      tags:
+        - API Health Checks
+      description: Endpoint to test the health of the API
+      responses:
+        '200':
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Ok
+        '500':
+          description: Server error response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server is down
+  /api/v1/auth/login:
+    post:
+      tags:
+        - Authentication
+      description: Endpoint to authenticate a user and obtain a token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nameOrEmail:
+                  type: string
+                  example: user@example.com
+                password:
+                  type: string
+                  example: your_password
+      responses:
+        '200':
+          description: Successful login response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Successfully Logged-In
+                  user:
+                    $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Unauthorized
+  /api/v1/auth/register:
+    post:
+      tags:
+        - Authentication
+      description: Endpoint to register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: John Doe
+                email:
+                  type: string
+                  example: user@example.com
+                password:
+                  type: string
+                  example: your_password
+                avatar:
+                  type: string
+                  example: asad.jpg
+      responses:
+        '201':
+          description: Successful registration response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Registration successful
+                  user:
+                    $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Bad request
+        '409':
+          description: Conflict response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: User already exists
+        '500':
+          description: Internal server error response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Internal Server error
+  /api/v1/user/check:
+    get:
+      tags:
+        - User Manage
+      summary: Check User Or Profile
+      description: Check user information OR profile
+      operationId: checkUser
+      responses:
+        '200':
+          description: User information retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  user:
+                    $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+  /api/v1/user/logout:
+    get:
+      tags:
+        - User Manage
+      summary: Logout User
+      description: User Logout
+      operationId: logoutUser
+      responses:
+        '200':
+          description: User logged-out successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Logged Out
+        '400':
+          description: User not found for logout
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: No User Found to Logout!
+  /api/v1/user/users:
+    get:
+      tags:
+        - User Manage
+      summary: Get All Users
+      description: Retrieve a list of all users.
+      operationId: getAllUsers
+      responses:
+        '200':
+          description: List of users retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserWithoutPassword'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+  '/api/v1/user/{id}':
+    get:
+      tags:
+        - User Manage
+      summary: Get User by ID
+      description: Retrieve a user by its unique ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the user to retrieve.
+      responses:
+        '200':
+          description: User fetched successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithoutPassword'
+        '404':
+          description: User not found!
+  /api/v1/user/update-profile:
+    put:
+      tags:
+        - User Manage
+      summary: Update User Profile
+      description: Update the user's profile information.
+      operationId: updateUserProfile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        '200':
+          description: User profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithoutPassword'
+        '401':
+          description: Unauthorized
+        '404':
+          description: User not found
+        '500':
+          description: Internal Server Error
+  /api/v1/user/change-password:
+    post:
+      tags:
+        - User Manage
+      summary: Change User Password
+      description: Change the password of the currently logged-in user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                oldPassword:
+                  type: string
+                  example: current_password
+                newPassword:
+                  type: string
+                  example: new_password
+      responses:
+        '200':
+          description: Password changed successfully.
+        '401':
+          description: Unauthorized. Old password is incorrect.
+  /api/v1/user:
+    delete:
+      tags:
+        - User Manage
+      summary: Delete User
+      description: Delete / Remove User from system
+      responses:
+        '200':
+          description: Deleted User Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithoutPassword'
+        '401':
+          description: Cannot Delete User!
+        '404':
+          description: User not found!
+  /api/v1/blogs:
+    get:
+      tags:
+        - Blog Manage
+      summary: Get All Blog Posts
+      description: Retrieve a list of all blog posts.
+      parameters:
+        - name: page
+          in: query
+          description: Page number of pagination
+          schema:
+            type: integer
+          default: 1
+        - name: limit
+          in: query
+          description: Number of items per page
+          schema:
+            type: integer
+          default: 10
+        - name: category
+          in: query
+          description: Filter by category
+          schema:
+            type: string
+        - name: search
+          in: query
+          description: Search by title or content
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved the list of blog posts.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogListResponse'
+    post:
+      tags:
+        - Blog Manage
+      summary: Create a Blog Post
+      description: Create a new blog post.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogCreateRequest'
+      responses:
+        '201':
+          description: Blog post created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogResponse'
+  '/api/v1/blogs/{blogId}':
+    get:
+      tags:
+        - Blog Manage
+      summary: Get Blog Post by ID
+      description: Retrieve a blog post by its unique ID.
+      parameters:
+        - in: path
+          name: blogId
+          required: true
+          schema:
+            type: string
+          description: ID of the blog post to retrieve.
+      responses:
+        '200':
+          description: Successfully retrieved the blog post.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogResponse'
+        '404':
+          description: Blog post not found.
+    put:
+      tags:
+        - Blog Manage
+      summary: Update Blog Post by ID
+      description: Update an existing blog post by its unique ID.
+      parameters:
+        - in: path
+          name: blogId
+          required: true
+          schema:
+            type: string
+          description: ID of the blog post to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogUpdateRequest'
+      responses:
+        '200':
+          description: Blog post updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogResponse'
+        '404':
+          description: Blog post not found.
+    delete:
+      tags:
+        - Blog Manage
+      summary: Delete Blog Post by ID
+      description: Delete a blog post by its unique ID.
+      parameters:
+        - in: path
+          name: blogId
+          required: true
+          schema:
+            type: string
+          description: ID of the blog post to delete.
+      responses:
+        '204':
+          description: Blog post deleted successfully.
+        '404':
+          description: Blog post not found.
+  /api/v1/admin/blogs:
+    get:
+      tags:
+        - Admin Panel
+      summary: Get All Blog Posts (Admin)
+      description: Retrieve a list of all blog posts for admin.
+      responses:
+        '200':
+          description: Successfully retrieved the list of blog posts.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogListResponse'
+  '/api/v1/admin/blogs/{blogId}':
+    get:
+      tags:
+        - Admin Panel
+      summary: Get Blog Post by ID (Admin)
+      description: Retrieve a blog post by its unique ID for admin.
+      parameters:
+        - in: path
+          name: blogId
+          required: true
+          schema:
+            type: string
+          description: ID of the blog post to retrieve.
+      responses:
+        '200':
+          description: Successfully retrieved the blog post.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogResponse'
+        '404':
+          description: Blog post not found.
+    put:
+      tags:
+        - Admin Panel
+      summary: Update Blog Post by ID (Admin)
+      description: Update an existing blog post by its unique ID for admin.
+      parameters:
+        - in: path
+          name: blogId
+          required: true
+          schema:
+            type: string
+          description: ID of the blog post to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogUpdateRequest'
+      responses:
+        '200':
+          description: Blog post updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogResponse'
+        '404':
+          description: Blog post not found.
+    delete:
+      tags:
+        - Admin Panel
+      summary: Delete Blog Post by ID (Admin)
+      description: Delete a blog post by its unique ID for admin.
+      parameters:
+        - in: path
+          name: blogId
+          required: true
+          schema:
+            type: string
+          description: ID of the blog post to delete.
+      responses:
+        '204':
+          description: Blog post deleted successfully.
+        '404':
+          description: Blog post not found.
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        avatar:
+          type: string
+        role:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        token:
+          type: string
+    UserWithoutPassword:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: 64f63d20d56f18e6cb2ec7aa
+        iat:
+          type: integer
+          example: 1693861862
+        exp:
+          type: integer
+          example: 1693865462
+    UserUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          example: user@example.com
+        avatar:
+          type: string
+          format: url
+          example: 'https://example.com/avatar.jpg'
+    BlogCreateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          example: My Blog Post
+        content:
+          type: string
+          example: This is the content of my blog post.
+    BlogUpdateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Updated Blog Title
+        content:
+          type: string
+          example: Updated blog content.
+    BlogResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 12345
+        title:
+          type: string
+          example: My Blog Post
+        content:
+          type: string
+          example: This is the content of my blog post.
+    BlogListResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/BlogResponse'

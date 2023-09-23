@@ -1,0 +1,79 @@
+# ============= [ POST -> REGISTER USER ] ===============
+post:
+  tags:
+    - Authentication
+  description: Endpoint to register a new user
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+              example: John Doe
+            email:
+              type: string
+              example: user@example.com
+            password:
+              type: string
+              example: your_password
+            avatar:
+              type: string
+              example: asad.jpg
+  responses:
+    "201":
+      description: Successful registration response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: Registration successful
+              user:
+                $ref: "../swagger.yaml#/components/schemas/User"
+    "400":
+      description: Bad request response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: Bad request
+    "409":
+      description: Conflict response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: User already exists
+    "500":
+      description: Internal server error response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: Internal Server error

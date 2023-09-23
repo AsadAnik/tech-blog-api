@@ -1,0 +1,70 @@
+# ============= [ GET -> GET BLOG BY ID ] ===============
+get:
+  tags:
+    - Blog Manage
+  summary: Get Blog Post by ID
+  description: Retrieve a blog post by its unique ID.
+  parameters:
+    - in: path
+      name: blogId
+      required: true
+      schema:
+        type: string
+      description: ID of the blog post to retrieve.
+  responses:
+    "200":
+      description: Successfully retrieved the blog post.
+      content:
+        application/json:
+          schema:
+            $ref: "../swagger.yaml#/components/schemas/BlogResponse"
+    "404":
+      description: Blog post not found.
+
+# ============= [ PUT -> BLOG UPDATE ] ==================
+put:
+  tags:
+    - Blog Manage
+  summary: Update Blog Post by ID
+  description: Update an existing blog post by its unique ID.
+  parameters:
+    - in: path
+      name: blogId
+      required: true
+      schema:
+        type: string
+      description: ID of the blog post to update.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../swagger.yaml#/components/schemas/BlogUpdateRequest"
+  responses:
+    "200":
+      description: Blog post updated successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "../swagger.yaml#/components/schemas/BlogResponse"
+    "404":
+      description: Blog post not found.
+
+# ============= [ DELETE -> BLOG DELETE ] ===============
+delete:
+  tags:
+    - Blog Manage
+  summary: Delete Blog Post by ID
+  description: Delete a blog post by its unique ID.
+  parameters:
+    - in: path
+      name: blogId
+      required: true
+      schema:
+        type: string
+      description: ID of the blog post to delete.
+  responses:
+    "204":
+      description: Blog post deleted successfully.
+    "404":
+      description: Blog post not found.

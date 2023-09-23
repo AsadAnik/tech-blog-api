@@ -1,0 +1,34 @@
+# ============= [ GET -> LOGOUT USER ] ===============
+get:
+  tags:
+    - User Manage
+  summary: Logout User
+  description: User Logout
+  operationId: logoutUser
+  responses:
+    200:
+      description: User logged-out successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: Logged Out
+    400:
+      description: User not found for logout
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: No User Found to Logout!

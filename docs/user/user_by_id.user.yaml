@@ -1,0 +1,22 @@
+# ============= [ GET -> GET BLOG BY ID ] ===============
+get:
+  tags:
+    - User Manage
+  summary: Get User by ID
+  description: Retrieve a user by its unique ID.
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+      description: ID of the user to retrieve.
+  responses:
+    "200":
+      description: User fetched successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "../swagger.yaml#/components/schemas/UserWithoutPassword"
+    "404":
+      description: User not found!

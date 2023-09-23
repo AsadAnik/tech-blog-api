@@ -1,0 +1,56 @@
+# ============= [ GET -> GET ALL BLOGS ] ===============
+get:
+  tags:
+    - Blog Manage
+  summary: Get All Blog Posts
+  description: Retrieve a list of all blog posts.
+  parameters:
+    - name: page
+      in: query
+      description: Page number of pagination
+      schema: 
+        type: integer
+      default: 1
+    - name: limit
+      in: query
+      description: Number of items per page
+      schema:
+        type: integer
+      default: 10
+    - name: category
+      in: query
+      description: Filter by category
+      schema:
+        type: string
+    - name: search
+      in: query
+      description: Search by title or content
+      schema:
+        type: string
+  responses:
+    "200":
+      description: Successfully retrieved the list of blog posts.
+      content:
+        application/json:
+          schema:
+            $ref: "../swagger.yaml#/components/schemas/BlogListResponse"
+
+# ============= [ POST -> BLOG CREATING ] ===============
+post:
+  tags:
+    - Blog Manage
+  summary: Create a Blog Post
+  description: Create a new blog post.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../swagger.yaml#/components/schemas/BlogCreateRequest"
+  responses:
+    "201":
+      description: Blog post created successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "../swagger.yaml#/components/schemas/BlogResponse"
