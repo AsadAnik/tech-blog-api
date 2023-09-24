@@ -1,7 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import catchAsyncErrorHandle from "../middleware/catchAsyncErrors";
 import { ControllerFunction } from '../common/types';
-import AdminService from '../services/admin.service';
+import UserService from '../services/user.service';
+import BlogService from '../services/blog.service';
+import CategoryService from '../services/category.service';
 
 
 class AdminController {
@@ -13,7 +15,7 @@ class AdminController {
         res: Response,
         _next: NextFunction
     ) => {
-        const blogs = await AdminService.getBlogs();
+        const blogs = await BlogService.getAllBlogs();
         if (!blogs) return res.status(404).json({
             success: false,
             message: 'No Blogs'
@@ -41,7 +43,7 @@ class AdminController {
             message: 'BlogId Not Given, Try Again',
         });
 
-        const blog = await AdminService.getBlog(blogId);
+        const blog = await BlogService.getBlog(blogId);
         if (!blog) return res.status(404).json({
             success: false,
             message: 'No Blog Found',
@@ -64,7 +66,7 @@ class AdminController {
         _next: NextFunction
     ) => {
         const blog = req.body;
-        const createdBlog = await AdminService.createBlog(blog);
+        const createdBlog = await BlogService.createBlog(blog);
         if (!createdBlog) return res.status(403).json({
             success: false,
             message: 'Can not create blog!',
@@ -94,7 +96,7 @@ class AdminController {
             message: 'BlogId Not Given, Try Again',
         });
 
-        const updatedBlog = await AdminService.updateBlog(blogId, updatedData);
+        const updatedBlog = await BlogService.updateBlog(blogId, updatedData);
         if (!updatedBlog) return res.status(401).json({
             success: false,
             message: 'Can not Update Blog!',
@@ -123,7 +125,7 @@ class AdminController {
             message: 'BlogId Not Given, Try Again',
         });
 
-        const deletedBlog = await AdminService.deleteBlog(blogId);
+        const deletedBlog = await BlogService.deleteBlog(blogId);
         if (!deletedBlog) return res.status(401).json({
             success: false,
             message: 'Can not Delete Blog!',
@@ -152,7 +154,7 @@ class AdminController {
             message: 'BlogId Not Given, Try Again',
         });
 
-        const blogApproved = await AdminService.changeBlogApprovement(blogId, approved);
+        const blogApproved = await BlogService.changeBlogApprovement(blogId, approved);
         if (!blogApproved) return res.status(401).json({
             success: false,
             message: 'Can not change the approval of blog post!'
@@ -181,7 +183,7 @@ class AdminController {
             message: 'BlogId Not Given, Try Again',
         });
 
-        const blogStatus = await AdminService.changeBlogStatus(blogId, status);
+        const blogStatus = await BlogService.changeBlogStatus(blogId, status);
         if (!blogStatus) return res.status(401).json({
             success: false,
             message: 'Can not change the status of blog post!'
@@ -210,7 +212,7 @@ class AdminController {
             message: 'UserId Not Given, Try Again',
         });
 
-        const userRole = await AdminService.changeUserRole(userId, role);
+        const userRole = await UserService.changeUserRole(userId, role);
         if (!userRole) return res.status(401).json({
             success: false,
             message: 'Can not change the role of User!'
@@ -220,6 +222,108 @@ class AdminController {
             success: true,
             message: `Changed the User's Role to : ${role}`,
             userRole
+        });
+    });
+
+     /**
+     * ---- Get Categories ----
+     */
+     static getCates: ControllerFunction = catchAsyncErrorHandle(async (
+        _req: Request,
+        res: Response,
+        _next: NextFunction
+    ) => {
+        const cates = await CategoryService.getCates();
+        if (!cates) return res.status(404).json({
+            success: false,
+            message: 'No Categories'
+        });
+
+        res.status(200).json({
+            success: true,
+            message: "Categories Successfully Fetched",
+            cates
+        });
+    });
+    
+     /**
+     * ---- Create Category ----
+     */
+     static createCate: ControllerFunction = catchAsyncErrorHandle(async (
+        req: Request,
+        res: Response,
+        _next: NextFunction
+    ) => {
+        const cate = req.body;
+        const createdCate = await CategoryService.createCate(cate);
+        if (!createdCate) return res.status(403).json({
+            success: false,
+            message: 'Can not create category!',
+        });
+
+        res.status(200).json({
+            success: true,
+            message: "Created category successfully",
+            createdCate
+        });
+    });
+
+
+    /**
+     * ---- Update Blog ----
+     */
+    static updateCate: ControllerFunction = catchAsyncErrorHandle(async (
+        req: Request,
+        res: Response,
+        _next: NextFunction
+    ) => {
+        const { cateId } = req.params;
+        const updatedData = req.body;
+
+        if (!cateId) return res.status(401).json({
+            success: false,
+            message: 'Category ID Not Given, Try Again',
+        });
+
+        const updatedCate = await CategoryService.updateCate(cateId, updatedData);
+        if (!updatedCate) return res.status(401).json({
+            success: false,
+            message: 'Can not Update Category!',
+        });
+
+        res.status(200).json({
+            success: true,
+            message: "Category Updated Successfully",
+            updatedCate
+        });
+    });
+
+
+    /**
+     * ---- Delete Blog ----
+     */
+    static deleteCate: ControllerFunction = catchAsyncErrorHandle(async (
+        req: Request,
+        res: Response,
+        _next: NextFunction
+    ) => {
+        const { cateId } = req.params;
+
+        if (!cateId) return res.status(401).json({
+            success: false,
+            message: 'Category ID Not Given, Try Again',
+        });
+
+        const deletedCate = await CategoryService.deleteCate(cateId);
+        if (!deletedCate) return res.status(401).json({
+            success: false,
+            message: 'Can not Delete Category!',
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'Deleted Category Successfully',
+            deletedCate
         });
     });
 }

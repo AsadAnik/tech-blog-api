@@ -60,7 +60,7 @@ class BlogController {
         _next: NextFunction
     ) => {
         const { blogId } = req.params;
-        const blog = await BlogService.getBlogById(blogId);
+        const blog = await BlogService.getBlog(blogId);
         if (!blog) return res.status(404).json({
             success: false,
             message: 'Blog post not found'

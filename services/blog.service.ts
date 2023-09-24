@@ -26,21 +26,21 @@ class BlogService {
      * @param blogId 
      * @returns 
      */
-    static async getBlogById (blogId: string): Promise<any> {
+    static async getBlog (blogId: string): Promise<any> {
         const blog = await Blog.findById(blogId);
         if (!blog) return false;
         return blog;
     }
 
     /**
-     * ----- Get All Blogs ----
+     * ----- Get Blogs (With Features) ----
      */
     static async getBlogs (
-        search: string,
-        category: string,
-        page: number,
-        limit: number
-    ): Promise<any> {
+        search: string = '',
+        category: string = '',
+        page: number = 1,
+        limit: number = 10
+    ): Promise<IBlog[] | Boolean> {
         const skip = (page - 1) * limit;
         
         const query: any = search ? {
@@ -60,6 +60,16 @@ class BlogService {
     }
 
     /**
+     * ---- Get Blogs ----
+     * @returns 
+     */
+    static async getAllBlogs (): Promise<IBlog[] | Boolean> {
+        const blogs = await Blog.find().sort({createdAt: -1});
+        if (!blogs.length) return false;
+        return blogs;
+    }
+
+    /**
      * ---- Create New Blog ----
      * @param blog 
      * @returns 
@@ -69,6 +79,33 @@ class BlogService {
         if (!newBlog) return false;
         await newBlog.save();
         return newBlog;
+    }
+
+     /**
+     * ---- Change Approvement of Blog ----
+     * @param blogId 
+     * @param approved 
+     */
+     static async changeBlogApprovement(blogId: string, approved: boolean): Promise<IBlog | Boolean> {
+        const blog = await Blog.findById(blogId);
+        if (!blog) return false;
+        blog.approved = approved;
+        await blog.save();
+        return blog;
+    }
+
+    /**
+     * ---- Change Status of Blog ----
+     * @param blogId 
+     * @param status 
+     * @returns 
+     */
+    static async changeBlogStatus(blogId: string, status: string): Promise<IBlog | Boolean> {
+        const blog = await Blog.findById(blogId);
+        if (!blog) return false;
+        blog.status = status;
+        await blog.save();
+        return blog;
     }
 }
 
