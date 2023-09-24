@@ -6,8 +6,8 @@ class UserService {
      * ---- Get Users ----
      * @returns 
      */
-    static async getUsers (): Promise<IUser[] | Boolean> {
-        const users = await User.find().sort({createdAt: -1});
+    static async getUsers(): Promise<IUser[] | Boolean> {
+        const users = await User.find().sort({ createdAt: -1 });
         if (!users.length) return false;
         return users;
     }
@@ -17,7 +17,7 @@ class UserService {
      * @param id 
      * @returns 
      */
-    static async getUser (id: string): Promise<IUser | any> {
+    static async getUser(id: string): Promise<IUser | any> {
         const user = await User.findById(id);
         if (!user) return false;
         return user;
@@ -27,7 +27,7 @@ class UserService {
      * ----- Logout User ----
      * @param userId 
      */
-    static async logout (userId: string): Promise<any> {
+    static async logout(userId: string): Promise<any> {
         const user = await User.findOne({ _id: userId });
         if (!user) return false;
 
@@ -41,7 +41,7 @@ class UserService {
      * ----- User Check For Users Details ----
      * @param userId 
      */
-    static async userCheck (userId: string): Promise<IUser | Boolean> {
+    static async userCheck(userId: string): Promise<IUser | Boolean> {
         const user = await User.findOne({ _id: userId });
         if (!user) return false;
         return user;
@@ -53,10 +53,24 @@ class UserService {
      * @param updateData 
      * @returns 
      */
-    static async updateUser (id: string, updateData: IUser): Promise<IUser | Boolean> {
+    static async updateUser(id: string, updateData: IUser): Promise<IUser | Boolean> {
         const updatedUser = await User.findByIdAndUpdate(id, updateData, { new: true });
         if (!updatedUser) return false;
         return updatedUser
+    }
+
+    /**
+     * ---- Change User Role ----
+     * @param userId 
+     * @param role 
+     * @returns 
+     */
+    static async changeUserRole(userId: string, role: string): Promise<IUser | Boolean> {
+        const user = await User.findById(userId);
+        if (!user) return false;
+        user.role = role;
+        await user.save();
+        return user;
     }
 }
 
