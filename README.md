@@ -1,4 +1,7 @@
 # Tech Blog API with TypeScript Node
+`Check Live API Doc:` [https://blog-tech-api.onrender.com/api-doc]
+
+`Check Local API Environment:` [http://localhost:8080/api-doc]
 
 ## Installing
 `npm install` or `yarn`
