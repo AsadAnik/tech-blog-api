@@ -5,6 +5,8 @@ get:
   summary: Get All Users
   description: Retrieve a list of all users.
   operationId: getAllUsers
+  security:
+    - apiKeyAuth: [] # Requires API key authorization
   responses:
     200:
       description: List of users retrieved successfully

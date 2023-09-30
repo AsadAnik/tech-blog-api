@@ -27,6 +27,8 @@ put:
     - Blog Manage
   summary: Update Blog Post by ID
   description: Update an existing blog post by its unique ID.
+  security:
+    - apiKeyAuth: [] # Requires API key authorization
   parameters:
     - in: path
       name: blogId
@@ -56,6 +58,8 @@ delete:
     - Blog Manage
   summary: Delete Blog Post by ID
   description: Delete a blog post by its unique ID.
+  security:
+    - apiKeyAuth: [] # Requires API key authorization
   parameters:
     - in: path
       name: blogId

@@ -4,6 +4,8 @@ patch:
     - Admin Panel
   summary: Change User Role (Admin)
   description: Change user role as admin has access
+  security:
+    - adminAuth: [] # Requires API key authorization
   parameters:
     - in: path
       name: userId

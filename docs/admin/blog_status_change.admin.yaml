@@ -4,6 +4,8 @@ patch:
     - Admin Panel
   summary: Change blog status (Admin)
   description: Change blog status as admin has access
+  security:
+    - adminAuth: [] # Requires API key authorization
   parameters:
     - in: path
       name: blogId

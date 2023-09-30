@@ -218,3 +218,17 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/BlogResponse"
+        
+  # Security Schema for Adding Authorisation Header..
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key for regular users
+
+    adminAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key for admin users

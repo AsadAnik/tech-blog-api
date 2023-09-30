@@ -46,7 +46,7 @@ export const isAdmin = async (req: Request | any, res: Response, next: NextFunct
 
         if (user.role !== 'admin') return res.status(403).json({
             success: false,
-            message: 'Access denied. Admin role required.'
+            message: 'Access denied. Admin role user required only.'
         });
 
         next();

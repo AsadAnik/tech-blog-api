@@ -4,6 +4,8 @@ get:
     - User Manage
   summary: Check User Or Profile
   description: Check user information OR profile
+  security:
+    - apiKeyAuth: [] # Requires API key authorization
   operationId: checkUser
   responses:
     200:

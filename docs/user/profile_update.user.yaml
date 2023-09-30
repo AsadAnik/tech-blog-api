@@ -5,6 +5,8 @@ put:
   summary: Update User Profile
   description: Update the user's profile information.
   operationId: updateUserProfile
+  security:
+    - apiKeyAuth: [] # Requires API key authorization
   requestBody:
     required: true
     content:

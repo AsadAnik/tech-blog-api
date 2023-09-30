@@ -4,6 +4,8 @@ get:
     - User Manage
   summary: Logout User
   description: User Logout
+  security:
+    - apiKeyAuth: [] # Requires API key authorization
   operationId: logoutUser
   responses:
     200:

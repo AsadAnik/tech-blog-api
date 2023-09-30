@@ -8,15 +8,15 @@ get:
     - name: page
       in: query
       description: Page number of pagination
-      schema: 
+      schema:
         type: integer
-      default: 1
+        default: 1
     - name: limit
       in: query
       description: Number of items per page
       schema:
         type: integer
-      default: 10
+        default: 10
     - name: category
       in: query
       description: Filter by category
@@ -41,6 +41,9 @@ post:
     - Blog Manage
   summary: Create a Blog Post
   description: Create a new blog post.
+  security:
+    - apiKeyAuth: [] # Requires API key authorization
+
   requestBody:
     required: true
     content:

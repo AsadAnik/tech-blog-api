@@ -176,6 +176,8 @@ paths:
         - User Manage
       summary: Check User Or Profile
       description: Check user information OR profile
+      security:
+        - apiKeyAuth: []
       operationId: checkUser
       responses:
         '200':
@@ -200,6 +202,8 @@ paths:
         - User Manage
       summary: Logout User
       description: User Logout
+      security:
+        - apiKeyAuth: []
       operationId: logoutUser
       responses:
         '200':
@@ -235,6 +239,8 @@ paths:
       summary: Get All Users
       description: Retrieve a list of all users.
       operationId: getAllUsers
+      security:
+        - apiKeyAuth: []
       responses:
         '200':
           description: List of users retrieved successfully
@@ -254,6 +260,8 @@ paths:
         - User Manage
       summary: Get User by ID
       description: Retrieve a user by its unique ID.
+      security:
+        - apiKeyAuth: []
       parameters:
         - in: path
           name: id
@@ -277,6 +285,8 @@ paths:
       summary: Update User Profile
       description: Update the user's profile information.
       operationId: updateUserProfile
+      security:
+        - apiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -302,6 +312,8 @@ paths:
         - User Manage
       summary: Change User Password
       description: Change the password of the currently logged-in user.
+      security:
+        - apiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -326,6 +338,8 @@ paths:
         - User Manage
       summary: Delete User
       description: Delete / Remove User from system
+      security:
+        - apiKeyAuth: []
       responses:
         '200':
           description: Deleted User Successfully
@@ -349,13 +363,13 @@ paths:
           description: Page number of pagination
           schema:
             type: integer
-          default: 1
+            default: 1
         - name: limit
           in: query
           description: Number of items per page
           schema:
             type: integer
-          default: 10
+            default: 10
         - name: category
           in: query
           description: Filter by category
@@ -378,6 +392,8 @@ paths:
         - Blog Manage
       summary: Create a Blog Post
       description: Create a new blog post.
+      security:
+        - apiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -418,6 +434,8 @@ paths:
         - Blog Manage
       summary: Update Blog Post by ID
       description: Update an existing blog post by its unique ID.
+      security:
+        - apiKeyAuth: []
       parameters:
         - in: path
           name: blogId
@@ -445,6 +463,8 @@ paths:
         - Blog Manage
       summary: Delete Blog Post by ID
       description: Delete a blog post by its unique ID.
+      security:
+        - apiKeyAuth: []
       parameters:
         - in: path
           name: blogId
@@ -463,6 +483,8 @@ paths:
         - Admin Panel
       summary: Get All Blog Posts (Admin)
       description: Retrieve a list of all blog posts for admin.
+      security:
+        - adminAuth: []
       responses:
         '200':
           description: Successfully retrieved the list of blog posts.
@@ -476,6 +498,8 @@ paths:
         - Admin Panel
       summary: Create a Blog Post (Admin)
       description: Create a new blog post
+      security:
+        - adminAuth: []
       requestBody:
         required: true
         content:
@@ -495,6 +519,8 @@ paths:
         - Admin Panel
       summary: Get Blog Post by ID (Admin)
       description: Retrieve a blog post by its unique ID for admin.
+      security:
+        - adminAuth: []
       parameters:
         - in: path
           name: blogId
@@ -516,6 +542,8 @@ paths:
         - Admin Panel
       summary: Update Blog Post by ID (Admin)
       description: Update an existing blog post by its unique ID for admin.
+      security:
+        - adminAuth: []
       parameters:
         - in: path
           name: blogId
@@ -543,6 +571,8 @@ paths:
         - Admin Panel
       summary: Delete Blog Post by ID (Admin)
       description: Delete a blog post by its unique ID for admin.
+      security:
+        - adminAuth: []
       parameters:
         - in: path
           name: blogId
@@ -561,6 +591,8 @@ paths:
         - Admin Panel
       summary: Change blog approval (Admin)
       description: Change blog approval as admin has access
+      security:
+        - adminAuth: []
       parameters:
         - in: path
           name: blogId
@@ -577,7 +609,6 @@ paths:
               properties:
                 approved:
                   type: boolean
-                  default: false
                   example: true
       responses:
         '200':
@@ -594,6 +625,8 @@ paths:
         - Admin Panel
       summary: Change blog status (Admin)
       description: Change blog status as admin has access
+      security:
+        - adminAuth: []
       parameters:
         - in: path
           name: blogId
@@ -610,7 +643,6 @@ paths:
               properties:
                 status:
                   type: string
-                  default: pending
                   example: running
       responses:
         '200':
@@ -627,6 +659,8 @@ paths:
         - Admin Panel
       summary: Change User Role (Admin)
       description: Change user role as admin has access
+      security:
+        - adminAuth: []
       parameters:
         - in: path
           name: userId
@@ -737,3 +771,14 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/BlogResponse'
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key for regular users
+    adminAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key for admin users

@@ -4,6 +4,8 @@ delete:
     - User Manage
   summary: Delete User
   description: Delete / Remove User from system
+  security:
+    - apiKeyAuth: [] # Requires API key authorization
   responses:
     "200":
       description: Deleted User Successfully

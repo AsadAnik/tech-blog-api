@@ -4,6 +4,8 @@ post:
     - Admin Panel
   summary: Create a Blog Post (Admin)
   description: Create a new blog post
+  security:
+    - adminAuth: [] # Requires API key authorization
   requestBody:
     required: true
     content:

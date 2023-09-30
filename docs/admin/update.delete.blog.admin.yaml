@@ -4,6 +4,8 @@ get:
     - Admin Panel
   summary: Get Blog Post by ID (Admin)
   description: Retrieve a blog post by its unique ID for admin.
+  security:
+    - adminAuth: [] # Requires API key authorization
   parameters:
     - in: path
       name: blogId
@@ -27,6 +29,8 @@ put:
     - Admin Panel
   summary: Update Blog Post by ID (Admin)
   description: Update an existing blog post by its unique ID for admin.
+  security:
+    - adminAuth: [] # Requires API key authorization
   parameters:
     - in: path
       name: blogId
@@ -56,6 +60,8 @@ delete:
     - Admin Panel
   summary: Delete Blog Post by ID (Admin)
   description: Delete a blog post by its unique ID for admin.
+  security:
+    - adminAuth: [] # Requires API key authorization
   parameters:
     - in: path
       name: blogId

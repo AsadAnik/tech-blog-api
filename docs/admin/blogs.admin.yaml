@@ -4,6 +4,8 @@ get:
     - Admin Panel
   summary: Get All Blog Posts (Admin)
   description: Retrieve a list of all blog posts for admin.
+  security:
+    - adminAuth: [] # Requires API key authorization
   responses:
     "200":
       description: Successfully retrieved the list of blog posts.

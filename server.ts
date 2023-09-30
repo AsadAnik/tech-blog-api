@@ -25,15 +25,15 @@ connectDB(DATABASE_URI)
     server.listen(PORT, () => {
       console.log(`Welcome to -- ${process.env.APP_NAME} -- `);
       console.log(`Server is running on http://${HOST}:${PORT}`);
-    });
-  });
+    })
+  })
 
-  // Handling Unhandled Promise Rejection..
-  process.on("unhandledRejection", (error: Error) => {
-    console.log(`Error: ${error.message}`);
-    console.log('Shutting down the server due to Uncaught Exception');
+// Handling Unhandled Promise Rejection..
+process.on("unhandledRejection", (error: Error) => {
+  console.log(`Error: ${error}`);
+  console.log('Shutting down the server due to Uncaught Exception');
 
-    server.close(() => {
-      process.exit(1);
-    });
+  server.close(() => {
+    process.exit(1);
   });
+});
