@@ -61,6 +61,7 @@ class UserController {
         res: Response,
         _next: NextFunction
     ) => {
+        console.log("lkajofef -- ", req.user);
         const { userId } = req.user;
         const user = await UserService.userCheck(userId);
         if (!user) return res.status(400).json({

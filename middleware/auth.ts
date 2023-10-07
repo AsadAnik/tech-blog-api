@@ -19,6 +19,7 @@ export const authenticateToken = (req: Request | any, res: Response, next: NextF
         // Verify the Token..
         const decoded = verifyToken(token);
         req.user = decoded;
+        console.log("user == ", decoded);
         next();
     } catch (error) {
         console.error(error);
