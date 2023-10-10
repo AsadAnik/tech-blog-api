@@ -104,7 +104,10 @@ class BlogController {
         _next: NextFunction
     ) => {
         const userBlog = req.body;
-        const blog = await BlogService.createBlog(userBlog);
+        const avatar = req?.file;
+        const coverAvatarPath = avatar?.path;
+
+        const blog = await BlogService.createBlog({ ...userBlog, cover: coverAvatarPath });
         if (!blog) return res.status(400).json({
             succes: false,
             message: 'Can not create Blog!',

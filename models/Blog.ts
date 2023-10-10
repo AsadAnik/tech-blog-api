@@ -28,6 +28,14 @@ const blogSchema = new Schema<IBlog>({
         type: String, 
         required: true 
     },
+    cover: {
+        public_id: {
+            type: String,
+        },
+        url: {
+            type: String,
+        },
+    },
     likes: [
         { 
             type: Schema.Types.ObjectId, 

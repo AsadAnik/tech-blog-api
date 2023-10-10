@@ -1,4 +1,5 @@
 import Blog, { IBlog } from '../models/Blog';
+import cloudinary from '../config/cloudinaryConfig';
 
 class BlogService {
     /**
@@ -74,8 +75,21 @@ class BlogService {
      * @param blog 
      * @returns 
      */
-    static async createBlog (blog: IBlog): Promise<any> {
-        const newBlog = new Blog(blog);
+    static async createBlog (blog: IBlog | any): Promise<any> {
+        let coverResult;
+
+        if (blog?.cover) {
+            coverResult = await cloudinary?.v2.uploader.upload(blog?.cover as string);
+        }
+
+        const newBlog = new Blog({
+            ...blog,
+            cover: {
+                public_id: coverResult?.public_id,
+                url: coverResult?.secure_url
+            }
+        });
+
         if (!newBlog) return false;
         await newBlog.save();
         return newBlog;
