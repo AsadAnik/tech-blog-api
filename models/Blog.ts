@@ -1,6 +1,7 @@
-import { Document, Model, Schema, model } from 'mongoose';
+import mongoose, { Document, Model, Schema, model } from 'mongoose';
 import { LikeModel } from './Like';
 import { CommentModel } from './Comment';
+import { IUser } from './User';
 
 // Define the Blod Document Interface.
 export interface IBlog extends Document {
@@ -10,6 +11,7 @@ export interface IBlog extends Document {
         public_id: string;  
         url: string;
     } | null;
+    author: mongoose.Types.ObjectId | IUser;
     likes: LikeModel[];
     comments: CommentModel[];
     approved: boolean;
@@ -36,10 +38,14 @@ const blogSchema = new Schema<IBlog>({
             type: String,
         },
     },
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     likes: [
         { 
             type: Schema.Types.ObjectId, 
-            ref: 'Like' 
+            ref: 'Like',
         }
     ],
     comments: [

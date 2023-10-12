@@ -7,7 +7,8 @@ export interface LikeModel extends Document {
 const likeSchema = new Schema({
     userId: { 
         type: Schema.Types.ObjectId, 
-        required: true 
+        required: true,
+        ref: 'User',
     }
 }, {
     timestamps: true

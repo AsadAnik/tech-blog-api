@@ -3,10 +3,62 @@ import cloudinary from '../config/cloudinaryConfig';
 
 class BlogService {
     /**
+     * ---- Like A Blog ----
+     * @param blogId 
+     * @param userId 
+     * @returns 
+     */
+    static async likeBlog(userId: string, blogId: string): Promise<any> {
+        const blog = await Blog.findById(blogId);
+        if (!blog) return false;
+
+        const alreadyLiked = blog.likes.some((like) => like.toString() === userId);
+        if (alreadyLiked) return false;
+
+        console.log(alreadyLiked);
+
+        const likedBLog = await Blog.findByIdAndUpdate(blogId, {
+            $push: { likes: userId }
+        });
+
+        return likedBLog;
+    }
+
+    /**
+     * ---- Dislike A Blog ----
+     * @param userId 
+     * @param blogId 
+     * @returns 
+     */
+    static async dislikeBlog(userId: string, blogId: string): Promise<IBlog | Boolean> {
+        const blog = await Blog.findById(blogId);
+        if (!blog) return false;
+
+        const likedIndex = blog.likes.findIndex((like) => like.toString() === userId);
+        if (likedIndex === -1) return false;
+
+        blog.likes.splice(likedIndex, 1);
+        await blog.save();
+
+        return blog;
+    }
+
+    /**
+     * ---- Get Blogs By Author ----
+     * @param userId 
+     * @returns 
+     */
+    static async getBlogsByAuthor(userId: string): Promise<IBlog[] | Boolean> {
+        const blogs = await Blog.find({ author: userId }).populate('author');
+        if (!blogs?.length) return false;
+        return blogs;
+    }
+
+    /**
      * ---- Delete Blog By Id ----
      * @param blogId 
      */
-    static async deleteBlog (blogId: string): Promise<any> {
+    static async deleteBlog(blogId: string): Promise<any> {
         const deletedBlog = await Blog.findByIdAndDelete(blogId);
         if (!deletedBlog) return false;
         return deletedBlog;
@@ -16,7 +68,7 @@ class BlogService {
      * ---- Update Blog By Id ----
      * @param blogId 
      */
-    static async updateBlog (blogId: string, blog: IBlog): Promise<any> {
+    static async updateBlog(blogId: string, blog: IBlog): Promise<any> {
         const updatedBlog = await Blog.findByIdAndUpdate(blogId, blog);
         if (!updatedBlog) return false;
         return updatedBlog;
@@ -27,8 +79,8 @@ class BlogService {
      * @param blogId 
      * @returns 
      */
-    static async getBlog (blogId: string): Promise<any> {
-        const blog = await Blog.findById(blogId);
+    static async getBlog(blogId: string): Promise<any> {
+        const blog = await Blog.findById(blogId).populate('author');
         if (!blog) return false;
         return blog;
     }
@@ -36,14 +88,14 @@ class BlogService {
     /**
      * ----- Get Blogs (With Features) ----
      */
-    static async getBlogs (
+    static async getBlogs(
         search: string = '',
         category: string = '',
         page: number = 1,
         limit: number = 10
     ): Promise<IBlog[] | Boolean> {
         const skip = (page - 1) * limit;
-        
+
         const query: any = search ? {
             $or: [
                 { title: { $regex: new RegExp(search, 'i') } },
@@ -55,7 +107,7 @@ class BlogService {
             query.category = category;
         }
 
-        const blogs = await Blog.find(query).sort({createdAt: -1}).skip(skip).limit(limit);
+        const blogs = await Blog.find(query).populate('author').sort({ createdAt: -1 }).skip(skip).limit(limit);
         if (!blogs.length) return false;
         return blogs;
     }
@@ -64,8 +116,8 @@ class BlogService {
      * ---- Get Blogs ----
      * @returns 
      */
-    static async getAllBlogs (): Promise<IBlog[] | Boolean> {
-        const blogs = await Blog.find().sort({createdAt: -1});
+    static async getAllBlogs(): Promise<IBlog[] | Boolean> {
+        const blogs = await Blog.find().sort({ createdAt: -1 });
         if (!blogs.length) return false;
         return blogs;
     }
@@ -75,7 +127,7 @@ class BlogService {
      * @param blog 
      * @returns 
      */
-    static async createBlog (blog: IBlog | any): Promise<any> {
+    static async createBlog(blog: IBlog | any): Promise<any> {
         let coverResult;
 
         if (blog?.cover) {
@@ -95,12 +147,12 @@ class BlogService {
         return newBlog;
     }
 
-     /**
-     * ---- Change Approvement of Blog ----
-     * @param blogId 
-     * @param approved 
-     */
-     static async changeBlogApprovement(blogId: string, approved: boolean): Promise<IBlog | Boolean> {
+    /**
+    * ---- Change Approvement of Blog ----
+    * @param blogId 
+    * @param approved 
+    */
+    static async changeBlogApprovement(blogId: string, approved: boolean): Promise<IBlog | Boolean> {
         const blog = await Blog.findById(blogId);
         if (!blog) return false;
         blog.approved = approved;

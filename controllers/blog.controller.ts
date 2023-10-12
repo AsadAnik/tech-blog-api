@@ -6,6 +6,73 @@ import BlogService from '../services/blog.service';
 
 class BlogController {
     /**
+     * ---- Like Blog ----
+     */
+    static likeABlog: ControllerFunction = catchAsyncErrorHandle(async (
+        req: Request | any,
+        res: Response
+    ) => {
+        const { userId } = req?.user;
+        const { blogId } = req?.params;
+
+        const blog = await BlogService.likeBlog(userId, blogId);
+        if (!blog) return res.status(403).json({
+            success: false,
+            message: 'Can not like this blog!',
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'Liked the blog',
+            blog,
+        });
+    });
+
+    /**
+     * ---- Dislike Blog ----
+     */
+    static dislikeABlog: ControllerFunction = catchAsyncErrorHandle(async (
+        req: Request | any,
+        res: Response
+    ) => {
+        const { userId } = req?.user;
+        const { blogId } = req?.params;
+
+        const blog = await BlogService.dislikeBlog(userId, blogId);
+        if (!blog) return res.status(403).json({
+            success: false,
+            message: 'Can not dislike this blog!',
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'Disliked the blog',
+            blog,
+        });        
+    });
+
+    /**
+     * ---- Blogs By Author ----
+     */
+    static blogsByAuthor: ControllerFunction = catchAsyncErrorHandle(async (
+        req: Request,
+        res: Response
+    ) => {
+        const { userId } = req.params;
+
+        const blogs = await BlogService.getBlogsByAuthor(userId);
+        if (!blogs) return res.status(404).json({
+            success: false,
+            message: 'No Blogs',
+        });
+
+        res.status(200).json({
+            success: true,
+            blogs,
+        });
+    });
+
+    /**
      * ---- Delete Blog ----
      */
     static deleteBlog: ControllerFunction = catchAsyncErrorHandle(async (
@@ -104,10 +171,11 @@ class BlogController {
         _next: NextFunction
     ) => {
         const userBlog = req.body;
+        const { userId } = req?.user;
         const avatar = req?.file;
         const coverAvatarPath = avatar?.path;
 
-        const blog = await BlogService.createBlog({ ...userBlog, cover: coverAvatarPath });
+        const blog = await BlogService.createBlog({ ...userBlog, cover: coverAvatarPath, author: userId });
         if (!blog) return res.status(400).json({
             succes: false,
             message: 'Can not create Blog!',
