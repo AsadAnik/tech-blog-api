@@ -10,6 +10,7 @@ const router = Router();
 router.get('/', BlogController.allBlogs)
     .get('/:blogId', BlogController.blogById)
     .post('/', authenticateToken, BlogController.createBlog)
+    .post('/add-comment', authenticateToken, BlogController.commentOnBlog)
     .post('/:blogId/like', authenticateToken, BlogController.likeABlog)
     .post('/:blogId/dislike', authenticateToken, BlogController.dislikeABlog)
     .get('/author/:userId', BlogController.blogsByAuthor)

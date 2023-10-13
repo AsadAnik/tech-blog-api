@@ -1,7 +1,50 @@
 import Blog, { IBlog } from '../models/Blog';
+import Comment, { CommentModel } from '../models/Comment';
 import cloudinary from '../config/cloudinaryConfig';
 
 class BlogService {
+    /**
+     * ---- Comment Delete ---
+     * @param commentId 
+     * @returns 
+     */
+    static async deleteComment(commentId: string): Promise<any> {
+        const comment = await Comment.findByIdAndDelete(commentId);
+        if (!comment) return false;
+        return comment;
+    }
+
+    /**
+     * ---- Comment Edit ----
+     * @param commentId 
+     * @param commentText 
+     * @returns 
+     */
+    static async editComment(commentId: string, commentText: string): Promise<CommentModel | Boolean> {
+        const comment = await Comment.findByIdAndUpdate(commentId, { text: commentText }, { new: true });
+        if (!comment) return false;
+        return comment;
+    }
+
+    /**
+     * ---- Comment on Blog ----
+     * @param userId 
+     * @param blogId 
+     * @param commentText 
+     * @returns 
+     */
+    static async commentBlog(userId: string, blogId: string, commentText: string): Promise<any> {
+        const comment = new Comment({user: userId, blog: blogId, text: commentText});
+        await comment.save();
+
+        // Add the comment reference to the blog's comments array..
+        const blog = await Blog.findByIdAndUpdate(blogId, {
+            $push: { comments: comment._id },
+        });
+
+        return blog;
+    }
+
     /**
      * ---- Like A Blog ----
      * @param blogId 
@@ -80,7 +123,17 @@ class BlogService {
      * @returns 
      */
     static async getBlog(blogId: string): Promise<any> {
-        const blog = await Blog.findById(blogId).populate('author');
+        const blog = await Blog.findById(blogId)
+            .populate('author')
+            .populate({
+                path: 'comments',
+                populate: {
+                    path: 'user',
+                    model: 'User',
+                    select: '-token'
+                }
+            });
+
         if (!blog) return false;
         return blog;
     }

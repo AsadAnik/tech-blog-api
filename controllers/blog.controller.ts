@@ -5,6 +5,73 @@ import BlogService from '../services/blog.service';
 
 
 class BlogController {
+     /**
+     * ----- Comment Delete -----
+     */
+     static deleteComment: ControllerFunction = catchAsyncErrorHandle(async (
+        req: Request | any,
+        res: Response
+    ) => {
+        const { commentId } = req?.body;
+
+        const comment = await BlogService.deleteComment(commentId);
+        if (!comment) return res.status(203).json({
+            success: false,
+            message: 'Can not Delete this comment!',
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'Comment Deleted Successfully',
+            comment,
+        });
+    });
+
+    /**
+     * ----- Comment Edit -----
+     */
+    static editComment: ControllerFunction = catchAsyncErrorHandle(async (
+        req: Request | any,
+        res: Response
+    ) => {
+        const { commentId, commentText } = req?.body;
+
+        const comment = await BlogService.editComment(commentId, commentText);
+        if (!comment) return res.status(203).json({
+            success: false,
+            message: 'Can not update this comment!',
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'Comment Upadted Successfully',
+            comment,
+        });
+    });
+
+    /**
+     * ---- Add Comment on Blog ----
+     */
+    static commentOnBlog: ControllerFunction = catchAsyncErrorHandle(async (
+        req: Request | any,
+        res: Response
+    ) => {
+        const { userId } = req?.user;
+        const { blogId, commentText } = req?.body;
+
+        const comment = await BlogService.commentBlog(userId, blogId, commentText);
+        if (!comment) return res.status(203).json({
+            success: false,
+            message: 'Can not create comment',
+        });
+
+        res.status(201).json({
+            success: true,
+            message: 'Commented on the Blog',
+            comment,
+        });
+    });
+
     /**
      * ---- Like Blog ----
      */
