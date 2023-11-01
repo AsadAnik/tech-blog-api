@@ -14,7 +14,9 @@
     "make:controller": "ts-node cli/index.ts generate:controller",
     "make:route": "ts-node cli/index.ts generate:route",
     "make:all": "ts-node cli/index.ts generate:all",
-    "make:all:schema": "ts-node cli/index.ts generate:all schema"
+    "make:all:schema": "ts-node cli/index.ts generate:all schema",
+    "build": "rm -rf dist && tsc",
+    "start:build": "npm run build && node dist/server.js"
   },
   "engines": {
     "node": ">=16.20.1"

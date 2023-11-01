@@ -1,0 +1,38 @@
+version: '3'
+services:
+  app:
+    build:
+      context:  .
+      dockerfile: Dockerfile
+    container_name: tech-blog-api
+    ports:
+      - 8080:8080
+    depends_on: 
+      - mongo
+    environment:
+      - DATABASE_URI=mongodb://mongo:27017/tech-blog
+    networks:
+      - my-tech-blog-network
+    command: "npm run dev"
+    volumes:
+      - "./:/usr/src/app"
+      - /usr/src/app/node_modules
+    working_dir: /usr/src/app
+    restart: always
+    links:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    container_name: my-mongo
+    ports:
+      - 27017:27017
+    networks:
+      - my-tech-blog-network
+    restart: always
+    volumes:
+      - /usr/local/var/mongodb:/data/db
+
+
+networks:
+  my-tech-blog-network:

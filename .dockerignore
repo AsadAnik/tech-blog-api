@@ -1,0 +1,9 @@
+# Exclude development files and directories
+node_modules
+.git
+.vscode
+.idea
+
+# Exclude configuration files with sensitive information
+.env
+.config.yml

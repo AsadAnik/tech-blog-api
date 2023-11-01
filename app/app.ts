@@ -8,7 +8,7 @@ import routes from './routes';
 import YAML from 'yamljs';
 
 // Load Swagger YAML file..
-const swaggerSpec = YAML.load('./docs/_build/swagger.yaml')
+// const swaggerSpec = YAML.load('./docs/_build/swagger.yaml')
 
 // Express App..
 const app: Application = express();
@@ -20,7 +20,7 @@ dotenv.config();
 const midddlewares = setupMiddlewares();
 
 // Using Swagger Middleware.
-app.use('/api-doc', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+// app.use('/api-doc', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 // Using Middleware & Route.
 app.use(globalErrorHandler);

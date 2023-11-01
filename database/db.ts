@@ -6,9 +6,15 @@ const db: Mongoose = mongoose;
 // Mongoose Promise..
 mongoose.Promise = global.Promise;
 
+// Mongo Options..
+const options: any = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+};
+
 export async function connectDB(URL: string): Promise<Mongoose> {
     try {
-        await db.connect(URL);
+        await db.connect(URL, options);
         console.log('-------- DATABASE IS CONNECTED -------');
         return db;
 
